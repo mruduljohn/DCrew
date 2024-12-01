@@ -31,6 +31,7 @@
     "clsx": "^2.1.1",
     "debug": "^4.3.7",
     "lucide-react": "^0.383.0",
+    "nes.css": "^2.2.1",
     "next": "^14.2.8",
     "path-to-regexp": "^8.2.0",
     "react": "^18.2.0",

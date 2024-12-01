@@ -26,6 +26,8 @@ interface Airdrop {
   longitude: number;
   description: string;
   reward: number;
+  maxPerUser: number;
+  totalAmount: number;
   distance?: number;
 }
 
@@ -37,7 +39,9 @@ const mockAirdrops: Airdrop[] = [
     latitude: 40.7128,
     longitude: -74.0060,
     description: 'Exclusive token drop for early adopters',
-    reward: 100
+    reward: 100,
+    maxPerUser: 1000,
+    totalAmount: 1000000
   },
   {
     id: '2',
@@ -45,7 +49,9 @@ const mockAirdrops: Airdrop[] = [
     latitude: 40.7300,
     longitude: -73.9900,
     description: 'Participate in groundbreaking DeFi project',
-    reward: 250
+    reward: 250,
+    maxPerUser: 500,
+    totalAmount: 100000
   }
 ];
 
@@ -141,6 +147,8 @@ const MapPage: React.FC = () => {
                     <h3>{airdrop.name}</h3>
                     <p>{airdrop.description}</p>
                     <p>Reward: {airdrop.reward} tokens</p>
+                    <p>Max Per User: {airdrop.maxPerUser}</p>
+                    <p>Total Amount: {airdrop.totalAmount}</p>
                     <p>Distance: {airdrop.distance} meters</p>
                     <button 
                       onClick={() => navigateToARView(airdrop)}
@@ -166,6 +174,8 @@ const MapPage: React.FC = () => {
             <h3>{airdrop.name}</h3>
             <p>Distance: {airdrop.distance} meters</p>
             <p>Reward: {airdrop.reward} tokens</p>
+            <p>Max Per User: {airdrop.maxPerUser}</p>
+            <p>Total Amount: {airdrop.totalAmount}</p>
             <button onClick={() => navigateToARView(airdrop)}>
               View in AR
             </button>
