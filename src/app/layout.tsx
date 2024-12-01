@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 
 import { ReactQueryProvider } from "@/components/ReactQueryProvider";
 import { WalletProvider } from "@/components/WalletProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { WrongNetworkAlert } from "@/components/WrongNetworkAlert";
+import AppProvider from "@/components/Provider";
+import { getServerSession } from "next-auth";
 
 import "./globals.css";
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   applicationName: "Aptos Boilerplate Template",
@@ -15,11 +18,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
+  const session = await getServerSession();
   return (
     <html lang="en">
       <head>
@@ -28,7 +32,11 @@ export default function RootLayout({
       <body>
         <WalletProvider>
           <ReactQueryProvider>
-            <div id="root">{children}</div>
+            <div id="root">
+              <AppProvider session={session}>
+                {children}
+              </AppProvider>
+            </div>
             <WrongNetworkAlert />
             <Toaster />
           </ReactQueryProvider>
