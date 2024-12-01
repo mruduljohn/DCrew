@@ -8,28 +8,53 @@ interface Airdrop {
   latitude: number;
   longitude: number;
   reward: string;
+  imageUrl: string;
+  renderType: 'image' | 'text';
 }
 
 const Page: React.FC = () => {
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [nearbyAirdrops, setNearbyAirdrops] = useState<Airdrop[]>([]);
-  const [renderableAirdrops, setRenderableAirdrops] = useState<Airdrop[]>([]);
-  const [airdrops, setAirdrops] = useState<Airdrop[]>([
-    { 
-      id: '1', 
-      name: 'Team DCrew Airdrop 1', 
-      latitude: 12.979272, 
-      longitude: 77.727549,
-      reward: '100 DCREW Tokens'
-    },
-    { 
-      id: '2', 
-      name: 'Team DCrew Airdrop 2', 
-      latitude: 12.979171, 
-      longitude: 77.727667,
-      reward: '150 DCREW Tokens'
-    },
-  ]);
+    const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [nearbyAirdrops, setNearbyAirdrops] = useState<Airdrop[]>([]);
+    const [renderableAirdrops, setRenderableAirdrops] = useState<Airdrop[]>([]);
+    const [renderMode, setRenderMode] = useState<'lottie' | 'text'>('lottie');
+    const [airdrops, setAirdrops] = useState<Airdrop[]>([
+      { 
+            id: '4', 
+            name: 'Team DCrew Airdrop 4', 
+            latitude: 12.979025, 
+            longitude: 77.728035,
+            reward: '450 DCREW Tokens',
+            imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
+            renderType: 'image'
+          },
+          { 
+            id: '5', 
+            name: 'Team DCrew Airdrop 5', 
+            latitude: 12.978735, 
+            longitude: 77.727962,
+            reward: '550 DCREW Tokens',
+            imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
+            renderType: 'image'
+          },
+          { 
+            id: '6', 
+            name: 'Team DCrew Airdrop 6', 
+            latitude: 12.978783, 
+            longitude: 77.728152,
+            reward: '650 DCREW Tokens',
+            imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
+            renderType: 'image'
+          },
+          { 
+              id: '7', 
+              name: 'Team DCrew Airdrop 6', 
+              latitude: 12.979232, 
+              longitude: 77.728069,
+              reward: '750 DCREW Tokens',
+              imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
+              renderType: 'image'
+            },
+    ]);
 
   // Calculate distance between two geographical points
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -62,7 +87,7 @@ const Page: React.FC = () => {
 
     setNearbyAirdrops(nearby);
 
-    // Find rendereable airdrops (within 10 meters)
+    // Find renderable airdrops (within 10 meters)
     const renderableDrops = nearby.filter(airdrop => {
       const distance = calculateDistance(
         userLocation.latitude, 
@@ -85,7 +110,6 @@ const Page: React.FC = () => {
   const handleRenderableAirdrop = (airdrops: Airdrop[]) => {
     console.log('Renderable Airdrops:', airdrops);
     // TODO: Implement specific logic when an airdrop is renderable
-    // This could include showing a notification, playing a sound, etc.
   };
 
   // Geolocation setup
@@ -120,7 +144,7 @@ const Page: React.FC = () => {
     getUserLocation();
   }, []);
 
-  // HTML for AR rendering
+  // Updated HTML for AR rendering with Images
   const htmlCode = `
     <!DOCTYPE html>
     <html>
@@ -140,43 +164,42 @@ const Page: React.FC = () => {
           vr-mode-ui="enabled: false"
           arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
         >
-          ${renderableAirdrops.map(airdrop => `
-            <a-text
-              value="${airdrop.name}\n${airdrop.reward}"
-              look-at="[gps-camera]"
-              scale="50 50 50"
-              gps-entity-place="latitude: ${airdrop.latitude}; longitude: ${airdrop.longitude};"
-              color="#000000"
-            ></a-text>
-          `).join('')}
+          ${renderableAirdrops.map(airdrop => {
+            if (airdrop.renderType === 'image' && airdrop.imageUrl) {
+              return `
+                <a-entity
+                  look-at="[gps-camera]"
+                  gps-entity-place="latitude: ${airdrop.latitude}; longitude: ${airdrop.longitude};"
+                >
+                  <a-image 
+                    src="${airdrop.imageUrl}"
+                    scale="1 1 1"
+                    rotation="0 0 0"
+                  ></a-image>
+                  <a-text
+                    value="${airdrop.name}\n${airdrop.reward}"
+                    position="0 1 0"
+                    scale="0.5 0.5 0.5"
+                    align="center"
+                    color="#000000"
+                  ></a-text>
+                </a-entity>
+              `;
+            } else {
+              return `
+                <a-text
+                  value="${airdrop.name}\n${airdrop.reward}"
+                  look-at="[gps-camera]"
+                  scale="50 50 50"
+                  gps-entity-place="latitude: ${airdrop.latitude}; longitude: ${airdrop.longitude};"
+                  color="#000000"
+                ></a-text>
+              `;
+            }
+          }).join('')}
           
           <a-camera gps-camera rotation-reader> </a-camera>
         </a-scene>
-        <div id="debug-info" style="
-          position: absolute; 
-          top: 10px; 
-          left: 10px; 
-          color: white; 
-          background: rgba(0,0,0,0.7); 
-          padding: 10px;
-          z-index: 1000;
-        "></div>
-        
-        <script>
-          window.addEventListener('load', () => {
-            const debugInfo = document.getElementById('debug-info');
-            const camera = document.querySelector('[gps-camera]');
-            
-            camera.addEventListener('gps-camera-update-position', (event) => {
-              const userCoords = event.detail.position;
-              debugInfo.innerHTML = \`
-                Latitude: \${userCoords.latitude.toFixed(6)}<br>
-                Longitude: \${userCoords.longitude.toFixed(6)}<br>
-                Heading: \${event.detail.heading || 'N/A'}
-              \`;
-            });
-          });
-        </script>
       </body>
     </html>
   `;
