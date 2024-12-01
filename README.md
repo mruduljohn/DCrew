@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Create Aptos Dapp Boilerplate Template
 
-## Getting Started
+The Boilerplate template provides a starter dapp with all necessary dapp infrastructure and a simple wallet info implementation, transfer APT and a simple message board functionality to send and read a message on chain.
 
-First, run the development server:
+## Read the Boilerplate template docs
+To get started with the Boilerplate template and learn more about the template functionality and usage, head over to the [Boilerplate template docs](https://learn.aptoslabs.com/en/dapp-templates/boilerplate-template) 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## The Boilerplate template provides:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Folder structure** - A pre-made dapp folder structure with a `src` (frontend) and `contract` folders.
+- **Dapp infrastructure** - All required dependencies a dapp needs to start building on the Aptos network.
+- **Wallet Info implementation** - Pre-made `WalletInfo` components to demonstrate how one can use to read a connected Wallet info.
+- **Transfer APT implementation** - Pre-made `transfer` components to send APT to an address.
+- **Message board functionality implementation** - Pre-made `message` components to send and read a message on chain
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## What tools the template uses?
 
-To learn more about Next.js, take a look at the following resources:
+- React framework
+- shadcn/ui + tailwind for styling
+- Aptos TS SDK
+- Aptos Wallet Adapter
+- Node based Move commands
+- [Next-pwa](https://ducanh-next-pwa.vercel.app/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What Move commands are available?
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The tool utilizes [aptos-cli npm package](https://github.com/aptos-labs/aptos-cli) that lets us run Aptos CLI in a Node environment.
 
-## Deploy on Vercel
+Some commands are built-in the template and can be ran as a npm script, for example:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run move:publish` - a command to publish the Move contract
+- `npm run move:test` - a command to run Move unit tests
+- `npm run move:compile` - a command to compile the Move contract
+- `npm run move:upgrade` - a command to upgrade the Move contract
+- `npm run dev` - a command to run the frontend locally
+- `npm run deploy` - a command to deploy the dapp to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For all other available CLI commands, can run `npx aptos` and see a list of all available commands.
