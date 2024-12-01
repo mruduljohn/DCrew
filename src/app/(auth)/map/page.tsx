@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { useGeolocation } from '../../hooks/useGeolocation';
+import { useGeolocation } from '@/hooks/useGeolocation';
 
 // Custom marker icons
 const createMarkerIcon = (type: 'user' | 'airdrop') => {
@@ -118,7 +118,7 @@ const MapPage: React.FC = () => {
           <MapContainer
             center={[location.latitude, location.longitude]}
             zoom={13}
-            style={{ height: '100vh', width: '100%' }}
+            style={{ height: 'calc(100vh - 80px)', width: '100%' }}
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -167,7 +167,7 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* Airdrop List Sidebar */}
-      <div className="airdrops-list">
+      <div className="airdrops-list" style={{ marginBottom: '80px' }}>
         <h2>Nearby Airdrops</h2>
         {nearbyAirdrops.map((airdrop) => (
           <div key={airdrop.id} className="airdrop-list-item">

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useSession, signIn, signOut } from "next-auth/react";
 
@@ -9,7 +9,11 @@ function App() {
   const { data: session } = useSession();
 
   const handleLogin = () => {
-    session ? signOut() : signIn();
+    if (session) {
+      signOut();
+    } else {
+      signIn('google', { callbackUrl: '/wallet' });
+    }
   };
 
 
