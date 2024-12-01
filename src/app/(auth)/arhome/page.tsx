@@ -1,48 +1,36 @@
-"use client";
+import React from 'react';
 
-import { useEffect } from 'react';
-import Head from 'next/head';
+const Page: React.FC = () => {
+    const htmlCode = `
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <title>GeoAR.js demo</title>
+                <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+                <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+                <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+            </head>
 
-const ARPage: React.FC = () => {
-  useEffect(() => {
-    console.log('AR.js Loaded');
-  }, []);
+            <body>
+                <a-scene
+                    vr-mode-ui="enabled: false"
+                    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+                >
+                    <a-text
+                        value="Team DCrew on Fire "
+                        look-at="[gps-camera]"
+                        scale="90 90 90"
+                        gps-entity-place="latitude: 12.979269 ; longitude: 77.727695;"
+                    ></a-text>
+                    <a-camera gps-camera rotation-reader> </a-camera>
+                </a-scene>
+            </body>
+        </html>
+    `;
 
-  return (
-    <div>
-      <Head>
-        {/* Import A-Frame */}
-        <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-
-        {/* Import AR.js after ensuring THREE is globally available */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.THREE = AFRAME.THREE;`,
-          }}
-        />
-        <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
-      </Head>
-
-      <h1 style={{ textAlign: 'center', margin: '20px' }}>AR Airdrop Scanner</h1>
-
-      {/* AR Scene */}
-      <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-        {/* Marker Detection */}
-        <a-marker preset="hiro">
-          {/* 3D Coin Animation */}
-          <a-entity
-            geometry="primitive: sphere; radius: 0.5"
-            material="color: gold; metalness: 0.8; roughness: 0.1"
-            position="0 0.5 0"
-            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"
-          ></a-entity>
-        </a-marker>
-
-        {/* AR Camera */}
-        <a-camera-static />
-      </a-scene>
-    </div>
-  );
+    return <div dangerouslySetInnerHTML={{ __html: htmlCode }} />;
 };
 
-export default ARPage;
+export default Page;

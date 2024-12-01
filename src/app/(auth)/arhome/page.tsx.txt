@@ -1,0 +1,158 @@
+"use client";
+
+import React, { useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+
+const ARPage: React.FC = () => {
+  const sceneRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Cleanup function to remove any existing AR scripts
+    const cleanupExistingScripts = () => {
+      const existingScripts = document.querySelectorAll(
+        'script[src*="aframe"], script[src*="ar.js"]'
+      );
+      existingScripts.forEach(script => script.remove());
+    };
+
+    // Dynamically load AR libraries
+    const loadARLibraries = () => {
+      return new Promise<void>((resolve, reject) => {
+        // Ensure we're on the client side
+        if (typeof window === 'undefined') return;
+
+        // Clean up existing scripts first
+        cleanupExistingScripts();
+
+        // Reset global objects
+        (window as any).AFRAME = undefined;
+        (window as any).THREE = undefined;
+
+        // Create AFRAME script
+        const aframeScript = document.createElement('script');
+        aframeScript.src = 'https://aframe.io/releases/1.5.0/aframe.min.js';
+        aframeScript.async = true;
+
+        // Create AR.js script
+        const arScript = document.createElement('script');
+        arScript.src = 'https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js';
+        arScript.async = true;
+
+        // Handle script loading
+        aframeScript.onload = () => {
+          arScript.onload = () => {
+            console.log('AR Libraries Loaded Successfully');
+            
+            // Ensure THREE is properly set
+            if (typeof window !== 'undefined') {
+              (window as any).THREE = (window as any).AFRAME.THREE;
+            }
+
+            resolve();
+          };
+          arScript.onerror = reject;
+          document.body.appendChild(arScript);
+        };
+        aframeScript.onerror = reject;
+        document.body.appendChild(aframeScript);
+      });
+    };
+
+    // Request camera permissions
+    const requestCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'environment' // Prefer back camera
+          } 
+        });
+        stream.getTracks().forEach(track => track.stop());
+        return true;
+      } catch (error) {
+        console.error('Camera permission denied', error);
+        alert('Camera access is required to scan airdrops');
+        return false;
+      }
+    };
+
+    // Combined initialization
+    const initAR = async () => {
+      try {
+        const cameraPermission = await requestCameraPermission();
+        if (cameraPermission) {
+          await loadARLibraries();
+        }
+      } catch (error) {
+        console.error('AR Initialization Error:', error);
+      }
+    };
+
+    initAR();
+  }, []);
+
+  return (
+    <div 
+      ref={sceneRef}
+      style={{ 
+        width: '100%', 
+        height: '100vh', 
+        position: 'relative', 
+        overflow: 'hidden' 
+      }}
+    >
+      <h1 style={{ 
+        position: 'absolute', 
+        top: '10px', 
+        left: 0, 
+        width: '100%', 
+        textAlign: 'center', 
+        zIndex: 10,
+        color: 'white' 
+      }}>
+        AR Airdrop Scanner
+      </h1>
+
+      {/* AR Scene with Explicit Configuration */}
+      <a-scene 
+        embedded 
+        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true; detectionMode: mono;"
+        vr-mode-ui="enabled: false;"
+        renderer="logarithmicDepthBuffer: true;"
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          position: 'absolute',
+          top: 0,
+          left: 0
+        }}
+      >
+        {/* Hiro Marker Detection */}
+        <a-marker 
+          preset="hiro"
+          type="pattern"
+          url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt"
+          emitevents="true"
+          cursor="rayOrigin: mouse"
+        >
+          {/* 3D Coin Model */}
+          <a-entity
+            id="coin-model"
+            geometry="primitive: sphere; radius: 0.5"
+            material="color: gold; metalness: 0.8; roughness: 0.1"
+            position="0 0.5 0"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"
+          ></a-entity>
+        </a-marker>
+
+        {/* AR Camera with Explicit Settings */}
+        <a-camera 
+          position="0 1.6 0" 
+          look-controls="enabled: true"
+          cursor="rayOrigin: mouse"
+        ></a-camera>
+      </a-scene>
+    </div>
+  );
+};
+
+export default dynamic(() => Promise.resolve(ARPage), { ssr: false });

@@ -40,7 +40,8 @@
     "./dist/types/**/*.ts",
     "./next-env.d.ts",
     ".next/types/**/*.ts",
-    "aframe.d.ts"
+    "aframe.d.ts",
+    "ar.d.ts"
   ],
   "exclude": [
     "./node_modules"
