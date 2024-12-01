@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-interface LocationState {
+interface Location {
   latitude: number;
   longitude: number;
 }
 
 export const useGeolocation = () => {
-  const [location, setLocation] = useState<LocationState | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -15,30 +15,22 @@ export const useGeolocation = () => {
       return;
     }
 
-    const handleSuccess = (position: GeolocationPosition) => {
-      setLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      });
-    };
-
-    const handleError = (error: GeolocationPositionError) => {
-      setError(error.message);
-    };
-
-    const watchId = navigator.geolocation.watchPosition(
-      handleSuccess, 
-      handleError, 
-      { 
+    navigator.geolocation.watchPosition(
+      (position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      },
+      (error) => {
+        setError(error.message);
+      },
+      {
         enableHighAccuracy: true,
-        maximumAge: 30000,
-        timeout: 27000 
+        timeout: 5000,
+        maximumAge: 0
       }
     );
-
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
   }, []);
 
   return { location, error };
