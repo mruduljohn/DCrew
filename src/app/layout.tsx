@@ -8,6 +8,7 @@ import AppProvider from "@/components/Provider";
 import { getServerSession } from "next-auth";
 
 import "./globals.css";
+import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 
 export const dynamic = 'force-dynamic';
 
