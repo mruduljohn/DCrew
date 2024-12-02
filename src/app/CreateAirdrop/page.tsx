@@ -64,8 +64,11 @@ const PinPlacementMap: React.FC<{
     setPins(updatedPins);
     onLocationSelect(updatedPins);
   };
+  const backgroundImage = "/bg/image.jpg";
+  
 
   return (
+    
     <div className="flex flex-col h-screen">
       <div className="flex-1 relative overflow-hidden">
         <div className="h-full w-full">
@@ -130,6 +133,7 @@ const AirdropCreationPage: React.FC = () => {
     radius: 20 // default 20 meters
   });
 
+  const backgroundImage = "/bg/image.jpg";
   // Form Validation
   const validateStep = () => {
     switch(step) {
@@ -152,10 +156,12 @@ const AirdropCreationPage: React.FC = () => {
     switch(step) {
       case 1:
         return (
-          <div className="token-details-step">
+          
+          <div className="nes-field token-details-step mt-4">
             <h2>Token Details</h2>
             <input
               type="text"
+              className='nes-input'
               placeholder="Token Contract Address"
               value={airdropDetails.tokenAddress}
               onChange={(e) => setAirdropDetails(prev => ({
@@ -172,8 +178,10 @@ const AirdropCreationPage: React.FC = () => {
                 tokenName: e.target.value
               }))}
             /> */}
+            <h2 className='mt-4'>Total Airdrop Amount</h2>
             <input
               type="number"
+              className='nes-input'
               placeholder="Total Airdrop Amount"
               value={airdropDetails.totalAmount}
               onChange={(e) => setAirdropDetails(prev => ({
@@ -186,11 +194,12 @@ const AirdropCreationPage: React.FC = () => {
       
       case 2:
         return (
-          <div className="airdrop-rules-step">
+          <div className="mt-4 airdrop-rules-step">
             <h2>Maximum Tokens per User</h2>
             <input
               type="number"
               placeholder="Max Tokens per User"
+              className='nes-input'
               value={airdropDetails.maxPerUser}
               onChange={(e) => setAirdropDetails(prev => ({
                 ...prev, 
@@ -198,9 +207,10 @@ const AirdropCreationPage: React.FC = () => {
               }))}
             />
             <div>
-              <label>Start Date</label>
+              <label className='mt-4'>Start Date</label>
               <input
                 type="date"
+                className='nes-input'
                 value={airdropDetails.startDate}
                 onChange={(e) => setAirdropDetails(prev => ({
                   ...prev, 
@@ -209,9 +219,10 @@ const AirdropCreationPage: React.FC = () => {
               />
             </div>
             <div>
-              <label>End Date</label>
+              <label className='mt-4'>End Date</label>
               <input
                 type="date"
+                className='nes-input'
                 value={airdropDetails.endDate}
                 onChange={(e) => setAirdropDetails(prev => ({
                   ...prev, 
@@ -219,9 +230,11 @@ const AirdropCreationPage: React.FC = () => {
                 }))}
               />
             </div>
+            <label className='mt-4'>Airdrop Radius (meters)</label>
             <input
               type="number"
               placeholder="Airdrop Radius (meters)"
+              className='nes-input'
               value={airdropDetails.radius}
               onChange={(e) => setAirdropDetails(prev => ({
                 ...prev, 
@@ -246,9 +259,14 @@ const AirdropCreationPage: React.FC = () => {
       
       case 4:
         return (
+          
           <div className="review-step">
             <h2>Review Airdrop Details</h2>
+            <div className='nes-container with-title'>
             <pre>{JSON.stringify(airdropDetails, null, 2)}</pre>
+
+            </div>
+            
           </div>
         );
       
@@ -277,30 +295,40 @@ const AirdropCreationPage: React.FC = () => {
   };
 
   return (
+    <div
+      className="h-screen w-screen flex flex-col justify-center items-center animate-backgroundMove relative"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
     <div className="airdrop-creation-container">
-      <div className="step-indicator">
+      <div className="mt-4 step-indicator">
         Step {step} of 4
       </div>
       
+      
       {renderStep()}
       
-      <div className="navigation-buttons">
+      <div className="mt-4 navigation-buttons">
         {step > 1 && (
-          <button onClick={handlePrevious}>
+          <button className='nes-btn is-error' onClick={handlePrevious}>
             Previous
           </button>
         )}
         
         {step < 4 ? (
-          <button onClick={handleNext}>
+          <button onClick={handleNext} className='nes-btn is-success '>
             Next
           </button>
         ) : (
-          <button onClick={handleSubmit}>
+          <button className='nes-btn is-submit' onClick={handleSubmit}>
             Create Airdrop
           </button>
         )}
       </div>
+    </div>
     </div>
   );
 };

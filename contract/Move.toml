@@ -4,6 +4,9 @@ version = "1.0.0"
 authors = []
 
 [addresses]
+dcrew_address = "0x18680d88cc14255706d13d5c0347d6a08a235997727c24e39f43ae98aecd90ad" # Replace with your desired address
+std = "0x1"
+aptos_framework = "0x1"
 message_board_addr = "_"
 
 [dependencies]
