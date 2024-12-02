@@ -1,40 +1,128 @@
-## Create Aptos Dapp Boilerplate Template
+Degen Drops 🚀
+==============
 
-The Boilerplate template provides a starter dapp with all necessary dapp infrastructure and a simple wallet info implementation, transfer APT and a simple message board functionality to send and read a message on chain.
+Degen Drops is a revolutionary gamified airdrop platform that combines augmented reality (AR) and location-based mechanics to ensure tokens reach active, engaged users. It transforms token distribution into an immersive experience that builds genuine excitement and engagement around your project.
 
-## Read the Boilerplate template docs
-To get started with the Boilerplate template and learn more about the template functionality and usage, head over to the [Boilerplate template docs](https://learn.aptoslabs.com/en/dapp-templates/boilerplate-template) 
+* * * * *
 
+Demo 🎥
+-------
 
-## The Boilerplate template provides:
+[Watch Degen Drops in Action](#)
 
-- **Folder structure** - A pre-made dapp folder structure with a `src` (frontend) and `contract` folders.
-- **Dapp infrastructure** - All required dependencies a dapp needs to start building on the Aptos network.
-- **Wallet Info implementation** - Pre-made `WalletInfo` components to demonstrate how one can use to read a connected Wallet info.
-- **Transfer APT implementation** - Pre-made `transfer` components to send APT to an address.
-- **Message board functionality implementation** - Pre-made `message` components to send and read a message on chain
+* * * * *
 
+The Problem Degen Drops Solves ⚡
+--------------------------------
 
-## What tools the template uses?
+### 1️⃣ **Ineffective Airdrops**
 
-- React framework
-- shadcn/ui + tailwind for styling
-- Aptos TS SDK
-- Aptos Wallet Adapter
-- Node based Move commands
-- [Next-pwa](https://ducanh-next-pwa.vercel.app/)
+Traditional airdrops often fail to engage the right audience, with tokens ending up in wallets of bots or uninterested participants. This results in wasted resources and diminished campaign impact.
 
-## What Move commands are available?
+### 2️⃣ **Lack of Engagement**
 
-The tool utilizes [aptos-cli npm package](https://github.com/aptos-labs/aptos-cli) that lets us run Aptos CLI in a Node environment.
+Passive airdrop methods don't generate buzz or foster community involvement, leaving campaigns feeling flat and uninspired.
 
-Some commands are built-in the template and can be ran as a npm script, for example:
+### 3️⃣ **Bot Exploitation**
 
-- `npm run move:publish` - a command to publish the Move contract
-- `npm run move:test` - a command to run Move unit tests
-- `npm run move:compile` - a command to compile the Move contract
-- `npm run move:upgrade` - a command to upgrade the Move contract
-- `npm run dev` - a command to run the frontend locally
-- `npm run deploy` - a command to deploy the dapp to Vercel
+Without anti-abuse measures, bots and automated scripts claim tokens, undermining the fairness and effectiveness of airdrops.
 
-For all other available CLI commands, can run `npx aptos` and see a list of all available commands.
+### 4️⃣ **Missed Marketing Opportunities**
+
+Conventional airdrops miss out on creating immersive experiences that could strengthen brand identity and community loyalty.
+
+* * * * *
+
+Why Degen Drops? 🎮
+-------------------
+
+### 🌟 **Gamified Airdrops**
+
+Transform airdrops into an interactive treasure hunt where users engage with tokens through real-world and virtual environments.
+
+### 🛡️ **Fair and Secure Distribution**
+
+With robust anti-abuse mechanisms, only real users can participate, ensuring tokens are distributed to an active and engaged audience.
+
+### 📍 **Location-Based Interactions**
+
+Drive authentic engagement with location-specific drops, requiring users to visit physical locations or events to collect tokens.
+
+### 🌎 **Augmented Reality Integration**
+
+Leverage AR technology to enhance user experiences, letting them collect tokens by interacting with virtual objects.
+
+### 🔗 **Seamless Onboarding**
+
+Google Login with **Okto Lite SDK** allows users to sign up without needing a wallet, simplifying access and adoption. Wallets are automatically created and integrated for a smooth experience.
+
+### 📊 **Impactful Campaigns**
+
+Every token distributed generates measurable impact, fostering genuine community growth and long-term user engagement.
+
+* * * * *
+
+Features ✨
+----------
+
+### 🎮 **Interactive and Gamified Experience**
+
+-   Pokémon-like token collection platform
+-   AR objects visible within a 50m radius, collectable within 10m
+
+### 📍 **Location-Specific Drops**
+
+-   Tokens tied to real-world locations for authentic interaction
+-   Encourages healthy engagement by promoting movement
+
+### 🛠️ **Integrated DEX on Aptos**
+
+-   Secure wallet integration with Aptos blockchain
+-   Send, receive, and swap tokens directly within the app
+
+### 🔒 **Anti-Abuse Mechanisms**
+
+-   Transparent claim tracking
+-   Prevents bot abuse and ensures fair distribution
+
+### 📱 **Progressive Web App (PWA)**
+
+-   Fully responsive design for immersive experiences across devices
+
+### 📊 **Advertising Opportunities**
+
+-   Virtual billboards for campaigns and promotions
+-   Innovative use of AR for marketing
+
+* * * * *
+
+Use Cases 🎯
+------------
+
+-   **Token Founders**: Distribute tokens regionally and engage users with interactive campaigns.
+-   **Airdrop Hunters**: Enjoy a gamified and fun approach to collecting tokens.
+-   **Advertisers**: Leverage AR for unique campaigns and virtual promotions.
+-   **Fitness Enthusiasts**: Gamify walking and exploring with token rewards.
+
+* * * * *
+
+Challenges We Faced 💡
+----------------------
+
+-   **Aptos SDK Contract Integration**: Adapting to Aptos SDK for the first time posed technical challenges.
+-   **AR.js in Next.js**: Integrating AR functionality with Next.js required overcoming compatibility issues.
+
+* * * * *
+
+Tech Stack 💻
+-------------
+
+-   **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+-   **AR Integration**: AR.js
+-   **Wallet Integration**: Okto Lite SDK
+-   **Blockchain**: Aptos TS SDK
+-   **App Type**: Progressive Web App (PWA)
+
+* * * * *
+
+### Degen Drops is your go-to platform for turning ordinary airdrops into extraordinary, engaging experiences. 🚀
