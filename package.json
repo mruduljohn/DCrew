@@ -9,7 +9,7 @@
     "move:publish": "node ./scripts/move/publish",
     "move:upgrade": "node ./scripts/move/upgrade",
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --no-lint",
     "start": "next start",
     "deploy": "vercel",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
