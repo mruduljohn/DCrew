@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { useWallet,InputTransactionData } from '@aptos-labs/wallet-adapter-react';
+import { Provider, Network } from "aptos";
+import { Types } from 'aptos';
 
 interface Airdrop {
   id: string;
@@ -10,9 +13,18 @@ interface Airdrop {
   reward: string;
   imageUrl: string;
   renderType: 'image' | 'text';
+  creatorAddress: string;
+  amount: string;
+}
+
+interface CollectionStatus {
+  isCollecting: boolean;
+  message: string;
 }
 
 const Page: React.FC = () => {
+  const provider = new Provider(Network.TESTNET); // or Network.MAINNET for production
+    const { account, signAndSubmitTransaction } = useWallet();
     const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [nearbyAirdrops, setNearbyAirdrops] = useState<Airdrop[]>([]);
     const [renderableAirdrops, setRenderableAirdrops] = useState<Airdrop[]>([]);
@@ -25,7 +37,9 @@ const Page: React.FC = () => {
             longitude: 77.728035,
             reward: '450 DCREW Tokens',
             imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
-            renderType: 'image'
+            renderType: 'image',
+            creatorAddress: '0x1234567890123456789012345678901234567890',
+            amount: '450 DCREW Tokens'
           },
           { 
             id: '5', 
@@ -34,7 +48,9 @@ const Page: React.FC = () => {
             longitude: 77.727962,
             reward: '550 DCREW Tokens',
             imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
-            renderType: 'image'
+            renderType: 'image',
+            creatorAddress: '0x1234567890123456789012345678901234567890',
+            amount: '550 DCREW Tokens'
           },
           { 
             id: '6', 
@@ -43,7 +59,9 @@ const Page: React.FC = () => {
             longitude: 77.728152,
             reward: '650 DCREW Tokens',
             imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
-            renderType: 'image'
+            renderType: 'image',
+            creatorAddress: '0x1234567890123456789012345678901234567890',
+            amount: '650 DCREW Tokens'
           },
           { 
               id: '7', 
@@ -52,9 +70,15 @@ const Page: React.FC = () => {
               longitude: 77.728069,
               reward: '750 DCREW Tokens',
               imageUrl: 'icons/music_logo.png', // Replace with actual Lottie URL
-              renderType: 'image'
+              renderType: 'image',
+              creatorAddress: '0x1234567890123456789012345678901234567890',
+              amount: '750 DCREW Tokens'
             },
     ]);
+    const [collectionStatus, setCollectionStatus] = useState<CollectionStatus>({
+        isCollecting: false,
+        message: ''
+    });
 
   // Calculate distance between two geographical points
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -144,6 +168,72 @@ const Page: React.FC = () => {
     getUserLocation();
   }, []);
 
+  // Add this function to handle airdrop collection
+  const collectAirdrop = async (airdrop: Airdrop) => {
+    if (!account?.address) {
+        setCollectionStatus({
+            isCollecting: false,
+            message: 'Please connect your wallet'
+        });
+        return;
+    }
+
+    try {
+        setCollectionStatus({
+            isCollecting: true,
+            message: 'Collecting airdrop...'
+        });
+
+        const payload: InputTransactionData = {
+            sender: account?.address,
+            data: {
+                function: "dcrew_address::dcrew_airdrop::claim_airdrop",
+                typeArguments: [],
+                functionArguments: [
+                    airdrop.creatorAddress,
+                    Math.floor(airdrop.latitude * 1e6),
+                    Math.floor(airdrop.longitude * 1e6),
+                    airdrop.amount
+                ]
+            }
+        };
+
+        const response = await signAndSubmitTransaction(payload);
+        await provider.waitForTransaction(response.hash);
+
+        setCollectionStatus({
+            isCollecting: false,
+            message: 'Successfully collected!'
+        });
+
+        // Remove collected airdrop from the list
+        setAirdrops(prev => prev.filter(drop => drop.id !== airdrop.id));
+
+    } catch (error: any) {
+        setCollectionStatus({
+            isCollecting: false,
+            message: error.message || 'Failed to collect airdrop'
+        });
+    }
+  };
+
+  // Add collection button to renderable airdrops
+  const renderCollectionButton = (airdrop: Airdrop) => {
+    if (!renderableAirdrops.find(drop => drop.id === airdrop.id)) {
+        return null;
+    }
+
+    return (
+        <button
+            onClick={() => collectAirdrop(airdrop)}
+            disabled={collectionStatus.isCollecting}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
+        >
+            {collectionStatus.isCollecting ? 'Collecting...' : 'Collect Airdrop'}
+        </button>
+    );
+  };
+
   // Updated HTML for AR rendering with Images
   const htmlCode = `
     <!DOCTYPE html>
@@ -164,39 +254,27 @@ const Page: React.FC = () => {
           vr-mode-ui="enabled: false"
           arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
         >
-          ${renderableAirdrops.map(airdrop => {
-            if (airdrop.renderType === 'image' && airdrop.imageUrl) {
-              return `
-                <a-entity
-                  look-at="[gps-camera]"
-                  gps-entity-place="latitude: ${airdrop.latitude}; longitude: ${airdrop.longitude};"
-                >
-                  <a-image 
-                    src="${airdrop.imageUrl}"
-                    scale="1 1 1"
-                    rotation="0 0 0"
-                  ></a-image>
-                  <a-text
-                    value="${airdrop.name}\n${airdrop.reward}"
-                    position="0 1 0"
-                    scale="0.5 0.5 0.5"
-                    align="center"
-                    color="#000000"
-                  ></a-text>
-                </a-entity>
-              `;
-            } else {
-              return `
-                <a-text
-                  value="${airdrop.name}\n${airdrop.reward}"
-                  look-at="[gps-camera]"
-                  scale="50 50 50"
-                  gps-entity-place="latitude: ${airdrop.latitude}; longitude: ${airdrop.longitude};"
-                  color="#000000"
-                ></a-text>
-              `;
-            }
-          }).join('')}
+          ${renderableAirdrops.map(airdrop => `
+            <a-entity
+              look-at="[gps-camera]"
+              gps-entity-place="latitude: ${airdrop.latitude}; longitude: ${airdrop.longitude};"
+            >
+              <a-image 
+                src="${airdrop.imageUrl}"
+                scale="1 1 1"
+                rotation="0 0 0"
+                class="clickable"
+                onclick="window.collectAirdrop('${airdrop.id}')"
+              ></a-image>
+              <a-text
+                value="${airdrop.name}\n${airdrop.reward}\nClick to collect!"
+                position="0 1 0"
+                scale="0.5 0.5 0.5"
+                align="center"
+                color="#000000"
+              ></a-text>
+            </a-entity>
+          `).join('')}
           
           <a-camera gps-camera rotation-reader> </a-camera>
         </a-scene>
@@ -237,6 +315,21 @@ const Page: React.FC = () => {
         ) : (
           'Fetching location...'
         )}
+      </div>
+      <div 
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+          background: 'rgba(0,0,0,0.7)',
+          padding: '10px',
+          borderRadius: '8px',
+          color: 'white'
+        }}
+      >
+        {collectionStatus.message}
       </div>
       <div dangerouslySetInnerHTML={{ __html: htmlCode }} />
     </div>
